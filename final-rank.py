@@ -9,7 +9,6 @@ from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 import re
 import csv
-from tqdm import tqdm
 
 
 # ### Tag Tweets as HI,EN,CME,CMH or CMEQ
@@ -67,7 +66,7 @@ with open('Datasheet.csv','r') as f:
 filtered_tweets={}
 with open('data.csv','rU') as f:
     reader = csv.reader(f, delimiter=',')
-    for tweet_id,user_id,tweet in tqdm(list(reader)):
+    for tweet_id,user_id,tweet in reader:
         filtered_words = []
         for s,e,t in meta[tweet_id]:
             word = tweet[s-1:e]
@@ -109,7 +108,7 @@ stemmed_key_words = []
 key_words = []
 with open('input.txt','rU') as f:
     reader = csv.reader(f)
-    for key_word, in tqdm(list(reader)):
+    for key_word, in reader:
         key_words.append(key_word)
         stemmed_key_words.append(tokenize(key_word)[0])
         
@@ -122,7 +121,7 @@ with open('input.txt','rU') as f:
 req_hash_tags=set()
 with open('data.csv','rU') as f:
     reader = csv.reader(f, delimiter=',')
-    for tweet_id,user_id,tweet in tqdm(list(reader)):
+    for tweet_id,user_id,tweet in reader:
         words = tweet.split(" ")
         hash_tags = []
         for word in words:
@@ -145,7 +144,7 @@ with open('data.csv','rU') as f:
 word_users = {}
 with open('data.csv','rU') as f:
     reader = csv.reader(f, delimiter=',')
-    for tweet_id,user_id,tweet in tqdm(list(reader)):
+    for tweet_id,user_id,tweet in reader:
         words = tweet.split(" ")
         hash_tag_present=False
         for word in words:
@@ -201,7 +200,7 @@ for word,type_user_counts in word_users.items():
 word_tweets = {}
 with open('data.csv','rU') as f:
     reader = csv.reader(f, delimiter=',')
-    for tweet_id,user_id,tweet in tqdm(list(reader)):
+    for tweet_id,user_id,tweet in reader:
         
         words = tweet.split(" ")
         hash_tag_present=False
@@ -254,21 +253,24 @@ for word,type_tweet_counts in word_tweets.items():
 # ### Final metric calculation
 # Final metric is calculated as mean of tweet metric and user metric
 
-# In[11]:
+# In[19]:
 
 final_ranks = []
-final_rank_dict = {}
 for key_word,stemmed_key_word in zip(key_words,stemmed_key_words):
     final_metric = (user_metric_dict[stemmed_key_word]+tweet_metric_dict[stemmed_key_word])/2
     final_ranks.append((key_word,final_metric))
-    final_rank_dict[key_word]=final_metric
+
+
+# In[20]:
+
+word_rank_list = [s[0] for s in sorted(final_ranks,key=lambda l:l[1],reverse=True)]
 
 
 # ### Write output to the file
 
-# In[ ]:
+# In[43]:
 
 with open('output.csv','w') as f:
     writer = csv.writer(f)
-    writer.writerows(final_ranks)
+    writer.writerows([(e[1],e[0]+1) for e in enumerate(word_rank_list)])
 
