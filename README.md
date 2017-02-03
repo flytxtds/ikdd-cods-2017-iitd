@@ -12,6 +12,6 @@ To run:
 Input words are read from input.txt and output is written to output.csv
 
 Team:
-* Jobin Wilson(jobin.wilson@flytxt.com)
 * Ram Mohan(ram.mohan@flytxt.com)
 * Muhammad Arif(muhammad.arif@flytxt.com)
+* Jobin Wilson(jobin.wilson@flytxt.com)
