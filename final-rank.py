@@ -186,6 +186,9 @@ for word,type_user_counts in word_users.items():
     u_cmh = 0.0
     if 'CMH' in type_user_counts:
         u_cmh = float(len(type_user_counts['CMH']))
+    if u_en == 0:
+        print word
+        u_en = 1
     user_metric = ((u_hi+u_cmh)/u_en)
     u_en_dict[word] = u_en
     u_hi_dict[word] = u_hi
@@ -243,6 +246,9 @@ for word,type_tweet_counts in word_tweets.items():
     t_cmh = 0.0
     if 'CMH' in type_tweet_counts:
         t_cmh = float(len(type_tweet_counts['CMH']))
+    if t_en == 0:
+        print word
+        t_en = 1
     tweet_metric = ((t_hi+t_cmh)/t_en)
     t_en_dict[word] = t_en
     t_hi_dict[word] = t_hi
